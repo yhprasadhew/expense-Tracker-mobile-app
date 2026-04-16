@@ -31,6 +31,7 @@ export async function getAllTransactions(req, res) {
       SELECT * FROM transactions
       ORDER BY created_at DESC;
     `;
+
     res.json(result);
   } catch (error) {
     console.error("GET ALL ERROR:", error);
@@ -38,7 +39,7 @@ export async function getAllTransactions(req, res) {
   }
 }
 
-// GET BY USER
+// GET BY USER ID
 export async function getTransactionsByUserId(req, res) {
   try {
     const { user_id } = req.params;

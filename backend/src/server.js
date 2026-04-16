@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+
+import { sql } from "./config/db.js";
 import rateLimiterMiddleware from "./middleware/rateLimiter.js";
 import transactionRoutes from "./routes/transactionRoute.js";
 
@@ -8,27 +10,34 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// 🔥 Logger (first)
+// Logger
 app.use((req, res, next) => {
   console.log("Request:", req.method, req.url);
   next();
 });
 
-// JSON parser
 app.use(express.json());
-
-// Rate limiter
 app.use(rateLimiterMiddleware);
+
+// DB check
+async function testDB() {
+  try {
+    await sql`SELECT 1`;
+    console.log("✅ Database connected successfully");
+  } catch (err) {
+    console.error("❌ Database connection failed:", err.message);
+  }
+}
+
+testDB();
 
 // Routes
 app.use("/api/transactions", transactionRoutes);
 
-// Home route (optional)
 app.get("/", (req, res) => {
   res.send("Server is working 🚀");
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

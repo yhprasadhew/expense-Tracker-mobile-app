@@ -12,7 +12,7 @@ const router = express.Router();
 // CREATE
 router.post("/", createTransaction);
 
-// SUMMARY (put BEFORE :user_id)
+// SUMMARY
 router.get("/summary/:user_id", getSummary);
 
 // GET ALL
